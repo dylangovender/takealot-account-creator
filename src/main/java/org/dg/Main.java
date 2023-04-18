@@ -12,13 +12,22 @@ import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
+
+        CustomDetails customDetails = new CustomDetails();
+
         List<String> emails = Files.lines(Paths.get("src/main/resources/emailAddresses")).collect(Collectors.toList());
+
+        String firstName = customDetails.firstName;
+        String lastName = customDetails.lastName;
+        String password = customDetails.password;
+        String cellphoneNumber = customDetails.cellphone;
 
         HttpClient client = HttpClient.newBuilder().build();
         String url = "https://api.takealot.com/rest/v-1-10-0/customers/register";
 
         for (String email : emails) {
-            String requestBody = String.format("{\"platform\":\"desktop\",\"sections\":[{\"section_id\":\"register_customer\",\"fields\":[{\"field_id\":\"first_name\",\"value\":\"yourFirstName\"},{\"field_id\":\"last_name\",\"value\":\"yourLastName\"},{\"field_id\":\"email\",\"value\":\"%s\"},{\"field_id\":\"new_password\",\"value\":\"yourPassword\"},{\"field_id\":\"mobile_country_code\",\"value\":\"ZA\"},{\"field_id\":\"mobile_national_number\",\"value\":\"yourCellphoneNumber\"},{\"field_id\":\"get_promotional_offers\",\"value\":\"true\"}]}]}", email);
+            String requestBody = String.format("{\"platform\":\"desktop\",\"sections\":[{\"section_id\":\"register_customer\",\"fields\":[{\"field_id\":\"first_name\",\"value\":\"%s\"},{\"field_id\":\"last_name\",\"value\":\"%s\"},{\"field_id\":\"email\",\"value\":\"%s\"},{\"field_id\":\"new_password\",\"value\":\"%s\"},{\"field_id\":\"mobile_country_code\",\"value\":\"ZA\"},{\"field_id\":\"mobile_national_number\",\"value\":\"%s\"},{\"field_id\":\"get_promotional_offers\",\"value\":\"true\"}]}]}", firstName, lastName, email, password, cellphoneNumber);
+            System.out.println(requestBody);
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
